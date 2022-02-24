@@ -2,7 +2,7 @@
   (:require-macros
     [garden.def :refer [defcssfn]])
   (:require
-    [spade.core   :refer [defglobal defclass]]
+    [spade.core   :refer [defglobal defclass defattrs]]
     [garden.units :refer [deg px]]
     [garden.color :refer [rgba]]))
 
@@ -26,3 +26,17 @@
 (defclass level1
   []
   {:color :green})
+
+(defattrs guess
+  []
+  [:.letter {:display "inline-block"
+             :border "1px solid black"}]
+  [:.correct {:background-color "green"
+              :color "white"}]
+  [:.in-word {:background-color "yellow"
+              :color "white"}]
+  [:.incorrect {:background-color "#999"
+                :color "black"}]
+  [:.current {:background-color "white"
+              :color "black"}]
+  )
