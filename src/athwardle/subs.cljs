@@ -21,7 +21,7 @@
 (re-frame/reg-sub
  ::guesses
  (fn [db]
-   (:gusses db)))
+   (:guesses db)))
 
 (re-frame/reg-sub
  ::answer

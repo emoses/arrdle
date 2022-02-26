@@ -10,7 +10,7 @@
 
 (defn gen-answer []
   (let [num-a (+ 1 (rand-int (dec LEN)))]
-    (apply str (concat (repeat num-a "a") (repeat (- LEN num-a) "r")))))
+    (apply str (concat (repeat num-a "A") (repeat (- LEN num-a) "R")))))
 
 (defn init-answer [state]
   (assoc state :answer (gen-answer)))
@@ -20,7 +20,7 @@
   (update state :guesses conj guess))
 
 (defn valid-guess? [guess]
-  (not (nil? (re-matches #"a[ar]{3}r" guess))))
+  (not (nil? (re-matches #"A[AR]{3}R" guess))))
 
 (defn status [state]
   (cond

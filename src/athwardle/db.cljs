@@ -1,7 +1,8 @@
-(ns athwardle.db)
+(ns athwardle.db
+  (:require
+   [athwardle.game :as game]))
 
 (def default-db
-  {:name "re-frame"
-   :answer "aaarr"
-   :guesses ["arrrr"]
-   :current-guess "ar"})
+  {:answer (game/gen-answer)
+   :guesses []
+   :current-guess ""})

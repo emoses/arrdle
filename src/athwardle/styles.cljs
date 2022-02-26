@@ -16,24 +16,41 @@
   [:body
    {:color               :red
     :background-color    :#ddd
-    :background-image    [(linear-gradient :white (px 2) :transparent (px 2))
-                          (linear-gradient (deg 90) :white (px 2) :transparent (px 2))
-                          (linear-gradient (rgba 255 255 255 0.3) (px 1) :transparent (px 1))
-                          (linear-gradient (deg 90) (rgba 255 255 255 0.3) (px 1) :transparent (px 1))]
-    :background-size     [[(px 100) (px 100)] [(px 100) (px 100)] [(px 20) (px 20)] [(px 20) (px 20)]]
-    :background-position [[(px -2) (px -2)] [(px -2) (px -2)] [(px -1) (px -1)] [(px -1) (px -1)]]}])
+    :display "flex"
+    :flex-direction "column"
+    :justify-content "space-between"
+    :align-items "center"}])
 
-(defclass level1
+
+(defglobal board
+  [:.board
+   {:display "grid"
+    :grid-template-rows "repeat(6, 1fr)"
+    :grid-gap "5px"
+    :padding "10px"}]
+  [:header
+   {:flex "1 100%"}])
+
+
+(defclass letter-key
   []
-  {:color :green})
+  {:display :inline-block
+   :padding "10px"
+   :border-radius "2px"
+   :background-color "#ddd"}
+  )
 
 (defattrs guess
   []
+  {:display "grid"
+   :grid-template-columns"repeat(5, 1fr)"
+   :grid-gap "5px"
+   :padding "10px"}
   [:.letter {:display "inline-block"
              :border "1px solid black"}]
   [:.correct {:background-color "green"
               :color "white"}]
-  [:.in-word {:background-color "yellow"
+  [:.in-word {:background-color "#ea0"
               :color "white"}]
   [:.incorrect {:background-color "#999"
                 :color "black"}]
