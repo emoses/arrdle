@@ -14,14 +14,14 @@
 
 (defglobal defaults
   [:body
-   {:color               :red
-    :background-color    :#ddd
+   {:background-color    :white
     }]
   [:#main
    {:display "flex"
     :flex-direction "column"
     :justify-content "space-between"
-    :align-items "center"}])
+    :align-items "center"
+    :max-width "500px"}])
 
 
 (defglobal boardetc
@@ -29,14 +29,20 @@
    {:display "grid"
     :grid-template-rows "repeat(6, 1fr)"
     :grid-gap "5px"
-    :padding "10px"}]
+    :padding "10px"
+    :font-size "24px"}]
   [:header
-   {:flex "1 100%"}]
+   {:flex "1 100%"
+    :align-items :center
+    :font-family "'Helvetica Neue', sans-serif"
+    :font-weight :bold
+    :font-size "26px"}]
   [:.keyboard
    {:display "flex"
-    :justify-content "space-between"
+    :justify-content :center
     :max-width "500px"
-    :width "100%"}])
+    :width "100%"}
+   [:>* {:margin "2px"}]  ])
 
 (defclass letter-key
   []
@@ -51,12 +57,13 @@
   {:display "grid"
    :grid-template-columns"repeat(5, 1fr)"
    :grid-gap "5px"
-   :padding "10px"}
+   :padding "1px"}
   [:.letter {:display "inline-block"
              :border "1px solid black"
-             :min-width "1rem"
+             :min-width "1.75rem"
              :min-height "1rem"
-             :text-align "center"}]
+             :text-align "center"
+             :padding "5px"}]
   [:.correct {:background-color "green"
               :color "white"}]
   [:.in-word {:background-color "#ea0"

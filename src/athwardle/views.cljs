@@ -79,7 +79,7 @@
 (defn main-panel []
   (let [status (rf/subscribe [::subs/status])]
     [:div#main
-     [:header "Aaardle - " (name @status)]
+     [:header "Aaardle"]
      [board]
      [:section.keyboard
       [backspace-button]
