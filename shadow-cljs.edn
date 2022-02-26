@@ -24,6 +24,7 @@
   {:target     :browser
    :output-dir "resources/public/js/compiled"
    :asset-path "/js/compiled"
+   :compiler-options {:infer-externs :auto}
    :modules
    {:app {:init-fn athwardle.core/init}}
    :devtools

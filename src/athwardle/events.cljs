@@ -3,7 +3,6 @@
    [re-frame.core :as rf]
    [athwardle.db :as db]
    [athwardle.game :as game]
-   [goog.events :as gevent]
    [clojure.string :refer [upper-case]]
    ))
 
@@ -16,9 +15,11 @@
                   (.-metaKey evt))
       (cond
         (game/VALID-LETTERS key-norm) (rf/dispatch [::keypress key-norm])
-        (= (.-ENTER ^js gevent/KeyCodes) keycode) (rf/dispatch [::submit])
-        (or (= (.-DELETE ^js gevent/KeyCodes) keycode)
-            (= (.-BACKSPACE ^js gevent/KeyCodes) keycode)) (rf/dispatch [::backspace]))))
+        ;;13 = enter
+        (= 13 keycode) (rf/dispatch [::submit])
+        ;; 46 = delete, 8 = backspace
+        (or (= 46 keycode)
+            (= 8 keycode)) (rf/dispatch [::backspace]))))
   )
 
 (rf/reg-event-db
