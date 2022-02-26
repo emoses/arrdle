@@ -16,28 +16,34 @@
   [:body
    {:color               :red
     :background-color    :#ddd
-    :display "flex"
+    }]
+  [:#main
+   {:display "flex"
     :flex-direction "column"
     :justify-content "space-between"
     :align-items "center"}])
 
 
-(defglobal board
+(defglobal boardetc
   [:.board
    {:display "grid"
     :grid-template-rows "repeat(6, 1fr)"
     :grid-gap "5px"
     :padding "10px"}]
   [:header
-   {:flex "1 100%"}])
-
+   {:flex "1 100%"}]
+  [:.keyboard
+   {:display "flex"
+    :justify-content "space-between"
+    :max-width "500px"
+    :width "100%"}])
 
 (defclass letter-key
   []
   {:display :inline-block
    :padding "10px"
-   :border-radius "2px"
-   :background-color "#ddd"}
+   :border-radius "8px"
+   :background-color "#eee"}
   )
 
 (defattrs guess
@@ -47,7 +53,10 @@
    :grid-gap "5px"
    :padding "10px"}
   [:.letter {:display "inline-block"
-             :border "1px solid black"}]
+             :border "1px solid black"
+             :min-width "1rem"
+             :min-height "1rem"
+             :text-align "center"}]
   [:.correct {:background-color "green"
               :color "white"}]
   [:.in-word {:background-color "#ea0"

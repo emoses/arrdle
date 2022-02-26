@@ -4,6 +4,7 @@
    [athwardle.styles :as styles]
    [athwardle.subs :as subs]
    [athwardle.events :as events]
+   [goog.string :as gstring]
    ))
 
 (def GUESS-LEN 5)
@@ -31,10 +32,12 @@
                        :state :incorrect}))))))
 
 (defn letter [letter-state]
-  [:div {:class [ (name (:state letter-state)) "letter"]} (:letter letter-state)])
+  [:div {:class [ (name (:state letter-state)) "letter"]}
+   (or (:letter letter-state) (gstring/unescapeEntities "&nbsp;"))])
 
 (defn blank-row []
-  [:div (styles/guess) (for [i (range GUESS-LEN)] [:div.letter.blank {:key i}])])
+  [:div (styles/guess) (for [i (range GUESS-LEN)]
+                         [:div.letter.blank {:key i} (gstring/unescapeEntities "&nbsp;")])])
 
 (defn guess-row [guess answer]
   (if-not guess
@@ -63,7 +66,7 @@
 (defn backspace-button []
   [:div {:class (styles/letter-key)
          :on-click #(rf/dispatch [::events/backspace])}
-   "<-"])
+   "⌫"])
 
 (defn board []
   (let [cur (rf/subscribe [::subs/current-guess])
@@ -77,7 +80,7 @@
 
 (defn main-panel []
   (let [status (rf/subscribe [::subs/status])]
-    [:div
+    [:div#main
      [:header "Aaardle - " (name @status)]
      [board]
      [:section.keyboard
