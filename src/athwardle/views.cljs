@@ -8,27 +8,6 @@
    [goog.string :as gstring]
    ))
 
-(defn calc-guess [guess answer]
-  (loop [letter-count (frequencies answer)
-         [l & ll] guess
-         [a & aa] answer
-         result []]
-    (if-not l
-      result
-      (if (> (letter-count l) 0)
-        (recur
-         (update letter-count l dec)
-         ll
-         aa
-         (conj result {:letter l
-                       :state (if (= l a) :correct :in-word)}))
-        (recur
-         letter-count
-         ll
-         aa
-         (conj result {:letter l
-                       :state :incorrect}))))))
-
 (defn letter [letter-state]
   [:div {:class [ (name (:state letter-state)) "letter"]}
    (or (:letter letter-state) (gstring/unescapeEntities "&nbsp;"))])
@@ -38,9 +17,9 @@
                          [:div.letter.blank {:key i} (gstring/unescapeEntities "&nbsp;")])])
 
 (defn guess-row [guess answer]
-  (if-not guess
+  (if (empty? guess)
     [blank-row]
-    (let [states (calc-guess guess answer)]
+    (let [states (game/calc-guess guess answer)]
       [:div (styles/guess) (map-indexed (fn [i l] ^{:key i} [letter l]) states)])))
 
 (defn current-guess [guess]
@@ -59,12 +38,37 @@
 (defn submit-button []
   [:div {:class (styles/letter-key)
          :on-click #(rf/dispatch [::events/submit])}
-   "RET"])
+   "Enter"])
 
 (defn backspace-button []
   [:div {:class (styles/letter-key)
          :on-click #(rf/dispatch [::events/backspace])}
    "⌫"])
+
+(defn close-button [handler]
+  [:div {:class (styles/close-button)
+         :on-click #(rf/dispatch [::events/close-modal])} "⚔"])
+
+(defn modal [& content]
+  [:div (styles/modal)
+   [close-button]
+   (map-indexed #(with-meta %2 {:key %1}) content)])
+
+(defn info-modal []
+  [modal [:header "Aaardle"]
+   [:p "A pirate walks into a bar and walks up to order a drink.  The bartender looks down and sees that the pirate has a ship's wheel attached to the front of his pants.  \"What's that ship's wheel for?\" asks the bartender."]
+   [:p "The pirate replies, \"Arr, I dunno, but it's drivin' me nuts\""]
+   [:hr]
+   [:p "Aaardle, the pirate daily word game."]
+  [:footer "© 2022 Evan Moses"]])
+
+(defn win-modal []
+  [modal [:header "Arrr, ye win!"]
+   [:p "Shiver me timbers, ye guessed me word."]])
+
+(defn lose-modal [correct-word]
+  [modal [:header "Ye lose, ye scurvy dog!"]
+   [:p "Walk the plank ye scallywag.  The answer was " correct-word]])
 
 (defn board []
   (let [cur (rf/subscribe [::subs/current-guess])
@@ -73,13 +77,23 @@
         status (rf/subscribe [::subs/status])]
    [:section.board
       (doall (map-indexed (fn [i g] ^{:key i} [guess-row g @answer ]) @guesses))
-      (if (= @status :playing) [current-guess @cur] [guess-row nil nil])
+      (when (= @status :playing) [current-guess @cur])
       (for [i (range (inc (count @guesses)) game/MAX-GUESSES)] ^{:key i} [guess-row nil nil])]))
 
 (defn main-panel []
-  (let [status (rf/subscribe [::subs/status])]
+  (let [status (rf/subscribe [::subs/status])
+        modal-shown (rf/subscribe [::subs/modal])
+        answer (rf/subscribe [::subs/answer])]
     [:div#main
-     [:header "Aaardle"]
+     (condp = @modal-shown
+       :info [info-modal]
+       :win  [win-modal]
+       :lose [lose-modal @answer]
+       nil)
+     [:header [:div.left-buttons] [:div.title "Aaardle"]
+      [:div.right-buttons
+       [:div.info-button.icon-button
+        {:on-click #(rf/dispatch [::events/show-modal :info])} "?"]]]
      [board]
      [:section.keyboard
       [backspace-button]

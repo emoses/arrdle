@@ -17,7 +17,7 @@
    {:background-color    :white
     }]
   [:#main
-   {:display "flex"
+   {:display :flex
     :flex-direction "column"
     :justify-content "space-between"
     :align-items "center"
@@ -36,7 +36,23 @@
     :align-items :center
     :font-family "'Helvetica Neue', sans-serif"
     :font-weight :bold
-    :font-size "26px"}]
+    :font-size "26px"
+    :display :flex
+    :justify-content :center
+    :width "100%"}
+   [:.title
+    {:text-align :center
+     :flex "3 1"}]
+   [:.right-buttons
+    {:flex "1"
+     :display :flex
+     :justify-content :flex-end}]
+   [:.left-buttons
+    {:flex "1"
+     :display :flex
+     :justify-content :flex-start}]]
+  [:.icon-button
+   {:cursor :pointer}]
   [:.keyboard
    {:display "flex"
     :justify-content :center
@@ -49,7 +65,8 @@
   {:display :inline-block
    :padding "10px"
    :border-radius "8px"
-   :background-color "#eee"}
+   :background-color "#eee"
+   :cursor :pointer}
   )
 
 (defattrs guess
@@ -73,3 +90,26 @@
   [:.current {:background-color "white"
               :color "black"}]
   )
+
+(defattrs modal
+  []
+  {:display :block
+   :z-index 10
+   :background-color :white
+   :border "1px solid #ddd"
+   :border-radius "10px"
+   :position :absolute
+   :margin "1.75rem auto"
+   :left "50%"
+   :transform "translate(-50%, 0)"
+   :padding "10px"
+   :box-shadow "8px 5px 5px black"})
+
+(defclass close-button
+  []
+  {:position :absolute
+   :width "24px"
+   :height "24px"
+   :cursor :pointer
+   :top "16px"
+   :right "16px"})

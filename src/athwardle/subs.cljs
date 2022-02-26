@@ -32,3 +32,8 @@
  ::status
  (fn [db]
    (game/status db)))
+
+(re-frame/reg-sub
+ ::modal
+ (fn [db]
+   (:modal db)))

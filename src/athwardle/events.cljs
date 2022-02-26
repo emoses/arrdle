@@ -33,25 +33,44 @@
      db
      (update db :current-guess str letter))))
 
-(rf/reg-event-db
+(rf/reg-event-fx
  ::submit
- (fn [db _]
+ (fn [{:keys [db]} _]
    (if-not (= game/LEN (count (:current-guess db)))
-     db
-     (-> db
-         (update :guesses conj (:current-guess db))
-         (assoc :current-guess ""))
+     {:db db}
+     (let [new-state (-> db
+                         (update :guesses conj (:current-guess db))
+                         (assoc :current-guess ""))]
+       (condp = (game/status new-state)
+         :win {:db new-state
+               :fx [[:dispatch [::show-modal :win]]]}
+         :lose {:db new-state
+                :fx [[:dispatch [::show-modal :lose]]]}
+         {:db new-state}))
      )))
 
 (rf/reg-event-db
  ::backspace
- (rf/path :current-guess)
- (fn [g _]
-   (if (empty? g)
-     g
-     (subs g 0 (dec (count g))))))
+ (fn [db _]
+   (when (= :playing (game/status db))
+     (let [g (:current-guess db)]
+       (if (empty? g)
+         db
+         (assoc db :current-guess (subs g 0 (dec (count g)))))))))
 
 (rf/reg-event-db
  ::reset
  (fn [_ _]
    db/default-db))
+
+(rf/reg-event-db
+ ::close-modal
+ (rf/path :modal)
+ (fn [m _]
+   nil))
+
+(rf/reg-event-db
+ ::show-modal
+ (rf/path :modal)
+ (fn [_ [_ new-modal]]
+   new-modal))
