@@ -25,3 +25,11 @@
          (update :guesses conj (:current-guess db))
          (assoc :current-guess ""))
      )))
+
+(rf/reg-event-db
+ ::backspace
+ (rf/path :current-guess)
+ (fn [g _]
+   (if (empty? g)
+     g
+     (subs g 0 (dec (count g))))))

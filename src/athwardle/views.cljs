@@ -59,6 +59,11 @@
          :on-click #(rf/dispatch [::events/submit])}
    "RET"])
 
+(defn backspace-button []
+  [:div {:class (styles/letter-key)
+         :on-click #(rf/dispatch [::events/backspace])}
+   "<-"])
+
 (defn main-panel []
   (let [cur (rf/subscribe [::subs/current-guess])
         guesses (rf/subscribe [::subs/guesses])
@@ -69,5 +74,8 @@
       (doall (map-indexed (fn [i g] ^{:key i} [guess-row g @answer ]) @guesses))
       [current-guess @cur]
       (for [i (range (inc (count @guesses)) NUM-GUESSES)] ^{:key i} [guess-row nil nil])]
-     [:section.keyboard (key-button "A") (key-button "R") [submit-button {:key 3}]]
+     [:section.keyboard
+      [backspace-button]
+      [key-button "A"] [key-button "R"]
+      [submit-button]]
      ]))
