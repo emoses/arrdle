@@ -4,11 +4,9 @@
    [athwardle.styles :as styles]
    [athwardle.subs :as subs]
    [athwardle.events :as events]
+   [athwardle.game :as game]
    [goog.string :as gstring]
    ))
-
-(def GUESS-LEN 5)
-(def NUM-GUESSES 6)
 
 (defn calc-guess [guess answer]
   (loop [letter-count (frequencies answer)
@@ -36,7 +34,7 @@
    (or (:letter letter-state) (gstring/unescapeEntities "&nbsp;"))])
 
 (defn blank-row []
-  [:div (styles/guess) (for [i (range GUESS-LEN)]
+  [:div (styles/guess) (for [i (range game/LEN)]
                          [:div.letter.blank {:key i} (gstring/unescapeEntities "&nbsp;")])])
 
 (defn guess-row [guess answer]
@@ -46,7 +44,7 @@
       [:div (styles/guess) (map-indexed (fn [i l] ^{:key i} [letter l]) states)])))
 
 (defn current-guess [guess]
-  (let [guess-sp (take GUESS-LEN (lazy-cat (or guess "") (repeat " ")))]
+  (let [guess-sp (take game/LEN (lazy-cat (or guess "") (repeat " ")))]
     [:div (styles/guess)
      (map-indexed (fn [i l] ^{:key i} [letter l])
                   (map (fn [l] {:letter l :state :current}) guess-sp))]))
@@ -76,7 +74,7 @@
    [:section.board
       (doall (map-indexed (fn [i g] ^{:key i} [guess-row g @answer ]) @guesses))
       (if (= @status :playing) [current-guess @cur] [guess-row nil nil])
-      (for [i (range (inc (count @guesses)) NUM-GUESSES)] ^{:key i} [guess-row nil nil])]))
+      (for [i (range (inc (count @guesses)) game/MAX-GUESSES)] ^{:key i} [guess-row nil nil])]))
 
 (defn main-panel []
   (let [status (rf/subscribe [::subs/status])]

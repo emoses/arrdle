@@ -2,6 +2,7 @@
 
 (def LEN 5)
 (def MAX-GUESSES 6)
+(def VALID-LETTERS #{"A" "R"})
 
 (def state {
             :answer ""
