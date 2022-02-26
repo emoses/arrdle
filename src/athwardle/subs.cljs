@@ -27,3 +27,8 @@
  ::answer
  (fn [db]
    (:answer db)))
+
+(re-frame/reg-sub
+ ::status
+ (fn [db]
+   (game/status db)))

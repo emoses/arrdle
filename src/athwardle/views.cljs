@@ -49,10 +49,11 @@
                   (map (fn [l] {:letter l :state :current}) guess-sp))]))
 
 (defn key-button [letter]
-  [:div
-   {:class (styles/letter-key)
-    :on-click #(rf/dispatch [::events/keypress letter])}
-   letter])
+  (let [status (rf/subscribe [::subs/status])]
+    [:div
+     {:class (styles/letter-key)
+      :on-click #(when (= @status :playing) (rf/dispatch [::events/keypress letter]))}
+     letter]))
 
 (defn submit-button []
   [:div {:class (styles/letter-key)
@@ -64,16 +65,21 @@
          :on-click #(rf/dispatch [::events/backspace])}
    "<-"])
 
-(defn main-panel []
+(defn board []
   (let [cur (rf/subscribe [::subs/current-guess])
         guesses (rf/subscribe [::subs/guesses])
-        answer (rf/subscribe [::subs/answer])]
-    [:div
-     [:header "Aaardle"]
-     [:section.board
+        answer (rf/subscribe [::subs/answer])
+        status (rf/subscribe [::subs/status])]
+   [:section.board
       (doall (map-indexed (fn [i g] ^{:key i} [guess-row g @answer ]) @guesses))
-      [current-guess @cur]
-      (for [i (range (inc (count @guesses)) NUM-GUESSES)] ^{:key i} [guess-row nil nil])]
+      (if (= @status :playing) [current-guess @cur] [guess-row nil nil])
+      (for [i (range (inc (count @guesses)) NUM-GUESSES)] ^{:key i} [guess-row nil nil])]))
+
+(defn main-panel []
+  (let [status (rf/subscribe [::subs/status])]
+    [:div
+     [:header "Aaardle - " (name @status)]
+     [board]
      [:section.keyboard
       [backspace-button]
       [key-button "A"] [key-button "R"]
