@@ -16,6 +16,9 @@
   [:body
    {:background-color    :white
     }]
+  [:#app
+   {:display :flex
+    :justify-content :center}]
   [:#main
    {:display :flex
     :flex-direction "column"
