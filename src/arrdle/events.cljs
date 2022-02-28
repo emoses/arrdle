@@ -93,11 +93,9 @@
      (-> (.writeText (.-clipboard js/navigator) text)
          (.then #(rf/dispatch [::share-social-clipboard-done]))
          (.catch #(rf/dispatch [::share-social-clipboard-error])))
-     (try
+     (do
        (copy-to-clipboard text)
-       (rf/dispatch [::share-social-clipboard-done])
-       (catch js/Error e
-         (rf/dispatch [::share-social-clipboard-error e]))))
+       ((rf/dispatch [::share-social-clipboard-done]))))
    db))
 
 (rf/reg-event-db
