@@ -110,10 +110,11 @@
 
 (rf/reg-event-db
  ::share-social-clipboard-error
- (fn [db _]
+ (fn [db [_ err]]
    (js/setTimeout
     #(rf/dispatch [::toast-hide])
     5000)
+   (.log js/console err)
    (assoc db :toast "Error copying to clipboard")))
 
 (rf/reg-event-db
