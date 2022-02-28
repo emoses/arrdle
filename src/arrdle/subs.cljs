@@ -1,7 +1,7 @@
-(ns athwardle.subs
+(ns arrdle.subs
   (:require
    [re-frame.core :as re-frame]
-   [athwardle.game :as game]))
+   [arrdle.game :as game]))
 
 (re-frame/reg-sub
  ::name

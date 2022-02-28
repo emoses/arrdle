@@ -26,7 +26,7 @@
    :asset-path "/js/compiled"
    :compiler-options {:infer-externs :auto}
    :modules
-   {:app {:init-fn athwardle.core/init}}
+   {:app {:init-fn arrdle.core/init}}
    :devtools
    {:preloads [day8.re-frame-10x.preload
                devtools.preload]}

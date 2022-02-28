@@ -1,4 +1,4 @@
-# athwardle
+# arrdle
 
 A [re-frame](https://github.com/day8/re-frame) application designed to ... well, that part is up to
 you.
@@ -45,12 +45,12 @@ you.
     - Created on build with either the [dev](#running-the-app) or [prod](#production) profile
     - `js/compiled/`: compiled CLJS (`shadow-cljs`)
       - Not tracked in source control; see [`.gitignore`](.gitignore)
-* [`src/athwardle/styles.cljs`](src/athwardle/styles.cljs): CSS compilation source file (ClojureScript,
+* [`src/arrdle/styles.cljs`](src/arrdle/styles.cljs): CSS compilation source file (ClojureScript,
 [Garden](https://github.com/noprompt/garden))
-* [`src/athwardle/`](src/athwardle/): SPA source files (ClojureScript,
+* [`src/arrdle/`](src/arrdle/): SPA source files (ClojureScript,
 [re-frame](https://github.com/Day8/re-frame))
-  - [`core.cljs`](src/athwardle/core.cljs): contains the SPA entry point, `init`
-* [`test/athwardle/`](test/athwardle/): test files (ClojureScript,
+  - [`core.cljs`](src/arrdle/core.cljs): contains the SPA entry point, `init`
+* [`test/arrdle/`](test/arrdle/): test files (ClojureScript,
 [cljs.test](https://clojurescript.org/tools/testing))
   - Only namespaces ending in `-test` (files `*_test.cljs`) are compiled and sent to the test runner
 * [`.github/workflows/`](.github/workflows/): contains the
@@ -76,7 +76,7 @@ Use your preferred editor or IDE that supports Clojure/ClojureScript development
         ```bash
         export CHROME_BIN=chromium-browser
        ```
-5. Clone this repo and open a terminal in the `athwardle` project root directory
+5. Clone this repo and open a terminal in the `arrdle` project root directory
 
 ### Browser Setup
 
@@ -224,14 +224,14 @@ npx shadow-cljs <action> app
 ```
 ### Debug Logging
 
-The `debug?` variable in [`config.cljs`](src/cljs/athwardle/config.cljs) defaults to `true` in
+The `debug?` variable in [`config.cljs`](src/cljs/arrdle/config.cljs) defaults to `true` in
 [`dev`](#running-the-app) builds, and `false` in [`prod`](#production) builds.
 
 Use `debug?` for logging or other tasks that should run only on `dev` builds:
 
 ```clj
-(ns athwardle.example
-  (:require [athwardle.config :as config])
+(ns arrdle.example
+  (:require [arrdle.config :as config])
 
 (when config/debug?
   (println "This message will appear in the browser console only on dev builds."))

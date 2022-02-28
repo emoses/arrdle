@@ -1,4 +1,4 @@
-(ns athwardle.config)
+(ns arrdle.config)
 
 (def debug?
   ^boolean goog.DEBUG)

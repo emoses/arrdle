@@ -1,8 +1,8 @@
-(ns athwardle.events
+(ns arrdle.events
   (:require
    [re-frame.core :as rf]
-   [athwardle.db :as db]
-   [athwardle.game :as game]
+   [arrdle.db :as db]
+   [arrdle.game :as game]
    [clojure.string :refer [upper-case]]
    ))
 

@@ -1,6 +1,6 @@
-(ns athwardle.core-test
+(ns arrdle.core-test
   (:require [cljs.test :refer-macros [deftest testing is]]
-            [athwardle.core :as core]))
+            [arrdle.core :as core]))
 
 (deftest fake-test
   (testing "fake description"

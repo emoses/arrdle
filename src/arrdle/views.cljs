@@ -1,10 +1,10 @@
-(ns athwardle.views
+(ns arrdle.views
   (:require
    [re-frame.core :as rf]
-   [athwardle.styles :as styles]
-   [athwardle.subs :as subs]
-   [athwardle.events :as events]
-   [athwardle.game :as game]
+   [arrdle.styles :as styles]
+   [arrdle.subs :as subs]
+   [arrdle.events :as events]
+   [arrdle.game :as game]
    [goog.string :as gstring]
    ))
 
@@ -55,11 +55,11 @@
    (map-indexed #(with-meta %2 {:key %1}) content)])
 
 (defn info-modal []
-  [modal [:header "Aaardle"]
+  [modal [:header "Arrdle"]
    [:p "A pirate walks into a bar and walks up to order a drink.  The bartender looks down and sees that the pirate has a ship's wheel attached to the front of his pants.  \"What's that ship's wheel for?\" asks the bartender."]
    [:p "The pirate replies, \"Arr, I dunno, but it's drivin' me nuts\""]
    [:hr]
-   [:p "Aaardle, the pirate daily word game."]
+   [:p "Arrdle, the pirate daily word game."]
   [:footer "© 2022 Evan Moses"]])
 
 (defn win-modal []
@@ -90,7 +90,7 @@
        :win  [win-modal]
        :lose [lose-modal @answer]
        nil)
-     [:header [:div.left-buttons] [:div.title "Aaardle"]
+     [:header [:div.left-buttons] [:div.title "Arrdle"]
       [:div.right-buttons
        [:div.info-button.icon-button
         {:on-click #(rf/dispatch [::events/show-modal :info])} "?"]]]

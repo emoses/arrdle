@@ -1,4 +1,4 @@
-(ns athwardle.game)
+(ns arrdle.game)
 
 (def LEN 5)
 (def MAX-GUESSES 6)

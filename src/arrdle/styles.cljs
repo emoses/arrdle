@@ -1,4 +1,4 @@
-(ns athwardle.styles
+(ns arrdle.styles
   (:require-macros
     [garden.def :refer [defcssfn]])
   (:require

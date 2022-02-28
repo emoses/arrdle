@@ -1,10 +1,10 @@
-(ns athwardle.core
+(ns arrdle.core
   (:require
    [reagent.dom :as rdom]
    [re-frame.core :as re-frame]
-   [athwardle.events :as events]
-   [athwardle.views :as views]
-   [athwardle.config :as config]
+   [arrdle.events :as events]
+   [arrdle.views :as views]
+   [arrdle.config :as config]
    [goog.events :as gevent]
    ))
 
@@ -15,7 +15,6 @@
 
 (defn ^:dev/after-load mount-root []
   (re-frame/clear-subscription-cache!)
-  (gevent/unlisten js/window (.-KEYPRESS ^js gevent/EventType) events/key-handler)
   (gevent/unlisten js/window (.-KEYDOWN ^js gevent/EventType) events/key-handler)
   (let [root-el (.getElementById js/document "app")]
     (rdom/unmount-component-at-node root-el)
