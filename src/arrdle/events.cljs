@@ -76,12 +76,28 @@
  (fn [_ [_ new-modal]]
    new-modal))
 
+(defn copy-to-clipboard [val]
+  (let [el (js/document.createElement "textarea")]
+    (set! (.-value el) val)
+    (set! (.-contentEditable el) true)
+    (.appendChild js/document.body el)
+    (.select el)
+    (js/document.execCommand "copy")
+    (.removeChild js/document.body el)))
+
+
 (rf/reg-event-db
  ::share-social-clipboard
  (fn [db [_ text]]
-   (-> (.writeText (.-clipboard js/navigator) text)
-       (.then #(rf/dispatch [::share-social-clipboard-done]))
-       (.catch #(rf/dispatch [::share-social-clipboard-error])))
+   (if (.-clipboard js/navigator)
+     (-> (.writeText (.-clipboard js/navigator) text)
+         (.then #(rf/dispatch [::share-social-clipboard-done]))
+         (.catch #(rf/dispatch [::share-social-clipboard-error])))
+     (try
+       (copy-to-clipboard text)
+       (rf/dispatch [::share-social-clipboard-done])
+       (catch js/Error e
+         (rf/dispatch [::share-social-clipboard-error e]))))
    db))
 
 (rf/reg-event-db
