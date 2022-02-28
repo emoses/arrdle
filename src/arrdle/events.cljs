@@ -75,3 +75,33 @@
  (rf/path :modal)
  (fn [_ [_ new-modal]]
    new-modal))
+
+(rf/reg-event-db
+ ::share-social-clipboard
+ (fn [db [_ text]]
+   (-> (.writeText (.-clipboard js/navigator) text)
+       (.then #(rf/dispatch [::share-social-clipboard-done]))
+       (.catch #(rf/dispatch [::share-social-clipboard-error])))
+   db))
+
+(rf/reg-event-db
+ ::share-social-clipboard-done
+ (fn [db _]
+   (js/setTimeout
+    #(rf/dispatch [::toast-hide])
+    5000)
+   (assoc db :toast "Copied to clipboard")))
+
+(rf/reg-event-db
+ ::share-social-clipboard-error
+ (fn [db _]
+   (js/setTimeout
+    #(rf/dispatch [::toast-hide])
+    5000)
+   (assoc db :toast "Error copying to clipboard")))
+
+(rf/reg-event-db
+ ::toast-hide
+ (rf/path :toast)
+ (fn [_ _ ]
+   nil))

@@ -37,3 +37,8 @@
  ::modal
  (fn [db]
    (:modal db)))
+
+(re-frame/reg-sub
+ ::toast
+ (fn [db]
+   (:toast db)))

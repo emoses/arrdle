@@ -74,6 +74,27 @@
      :cursor :pointer})
   )
 
+(defclass social []
+  {:display :flex
+   :justify-content :space-around
+   }
+  [:.icon
+   {:width "24px"
+    :height "24px"}]
+  [:button
+   {:background-color "#666"
+    :border-radius "3px"
+    :display :flex
+    :align-items :center
+    :font-weight :bold
+    :color :white
+    :padding "5px"
+    :border "1px solid #ddd"}
+   [:.icon
+    {:width "20px"
+     :height "20px"
+     :margin-left "3px"}]])
+
 (defattrs guess
   []
   {:display "grid"
@@ -109,7 +130,7 @@
    :transform "translate(-50%, 0)"
    :min-width "300px"
    :padding "10px"
-   :box-shadow "8px 5px 5px black"}
+   :box-shadow "8px 5px 5px #ddd"}
   [:header
    {:margin-top "15px"}])
 
@@ -121,3 +142,22 @@
    :cursor :pointer
    :top "8px"
    :right "8px"})
+
+(defclass toast []
+  {:position :fixed
+   :bottom "50px"
+   :font-family "sans-serif"
+   :margin "0 auto"
+   :padding "10px"
+   :max-width "300px"
+   :font-size "150%"
+   :background-color :white
+   :border-radius "10px"
+   :box-shadow "5px 2px 2px #ddd"
+   :transition "all .5s ease-in-out"
+   :display :block
+   :opacity 100
+   :z-index 100}
+  [:&.hidden
+   {:display :none
+    :opacity 0}])

@@ -8,6 +8,22 @@
    [goog.string :as gstring]
    ))
 
+(defn letter-state-social [letter-state]
+  (condp = (:state letter-state)
+    :correct "🟩"
+    :in-word "🟨"
+    "⬛"))
+
+(defn guess-to-social [answer guess]
+  (let [states (game/calc-guess guess answer)]
+    (apply str (interpose " " (map letter-state-social states)))))
+
+(defn social-text [guesses answer win?]
+  (let [all-guesses (map (partial guess-to-social answer) guesses)]
+    (str (gstring/format "🏴‍☠️ Arrdle %d/6 🏴‍☠" (count all-guesses)) "\n\n"
+         (apply str (interpose "\n" all-guesses)) "\n\n"
+         "https://arrdle.7sirenscove.com")))
+
 (defn letter [letter-state]
   [:div {:class [ (name (:state letter-state)) "letter"]}
    (or (:letter letter-state) (gstring/unescapeEntities "&nbsp;"))])
@@ -48,6 +64,21 @@
 (defn close-button [handler]
   [:div {:class (styles/close-button)
          :on-click #(rf/dispatch [::events/close-modal])} "⚔"])
+"<a href=\"https://twitter.com/share?ref_src=twsrc%5Etfw\" class=\"twitter-share-button\" data-text=\"some default text\" data-show-count=\"false\"></a><script async src=\"https://platform.twitter.com/widgets.js\" charset=\"utf-8\"></script>"
+
+(defn tweet-button [social-text]
+  [:span.tweet
+   [:a {:href (gstring/format "https://twitter.com/intent/tweet/?text=%s" (gstring/urlEncode social-text))
+        :target "_blank"
+        :title "Share on Twitter"}
+    [:img.icon
+     {:src "img/twitter.svg"
+      :alt "Tweet"}]]])
+
+(defn copy-button [social-text]
+  [:span.copy
+   [:button {:on-click #(rf/dispatch [::events/share-social-clipboard social-text])}
+    "🏴‍☠ Share 🏴‍☠" [:img.icon {:src "img/share-white.svg" :alt ""}]]])
 
 (defn modal [& content]
   [:div (styles/modal)
@@ -63,8 +94,14 @@
   [:footer "© 2022 Evan Moses"]])
 
 (defn win-modal []
-  [modal [:header "Arrr, ye win!"]
-   [:p "Shiver me timbers, ye guessed me word."]])
+  (let [guesses (rf/subscribe [::subs/guesses])
+        answer (rf/subscribe [::subs/answer])]
+    [modal [:header "Arrr, ye win!"]
+     [:p "Shiver me timbers, ye guessed me word."]
+     (let [s (social-text @guesses @answer true)]
+       [:div {:class (styles/social)}
+        [tweet-button s]
+        [copy-button s]])]))
 
 (defn lose-modal [correct-word]
   [modal [:header "Ye lose, ye scurvy dog!"]
@@ -80,11 +117,16 @@
       (when (= @status :playing) [current-guess @cur])
       (for [i (range (inc (count @guesses)) game/MAX-GUESSES)] ^{:key i} [guess-row nil nil])]))
 
+(defn toast []
+  (let [toast (rf/subscribe [::subs/toast])]
+    [:div {:class [(styles/toast) (if-not @toast "hidden")]} @toast]))
+
 (defn main-panel []
   (let [status (rf/subscribe [::subs/status])
         modal-shown (rf/subscribe [::subs/modal])
         answer (rf/subscribe [::subs/answer])]
     [:div#main
+     [toast]
      (condp = @modal-shown
        :info [info-modal]
        :win  [win-modal]

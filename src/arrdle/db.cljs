@@ -6,4 +6,5 @@
   {:answer (game/gen-answer)
    :guesses []
    :current-guess ""
-   :modal nil})
+   :modal nil
+   :toast nil})
