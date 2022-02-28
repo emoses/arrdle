@@ -36,12 +36,12 @@
      letter]))
 
 (defn submit-button []
-  [:div {:class (styles/letter-key)
+  [:div {:class (styles/letter-key :large)
          :on-click #(rf/dispatch [::events/submit])}
    "Enter"])
 
 (defn backspace-button []
-  [:div {:class (styles/letter-key)
+  [:div {:class (styles/letter-key :large)
          :on-click #(rf/dispatch [::events/backspace])}
    "⌫"])
 

@@ -57,16 +57,18 @@
    {:display "flex"
     :justify-content :center
     :max-width "500px"
-    :width "100%"}
+    :touch-action :manipulation}
    [:>* {:margin "2px"}]  ])
 
 (defclass letter-key
-  []
-  {:display :inline-block
-   :padding "10px"
-   :border-radius "8px"
-   :background-color "#eee"
-   :cursor :pointer}
+  [& [size & _]]
+  (let [flex (if (= size :large) "1.5" "1")]
+    {:display :inline-block
+     :padding "10px 15px"
+     :border-radius "8px"
+     :background-color "#eee"
+     :flex flex
+     :cursor :pointer})
   )
 
 (defattrs guess
@@ -102,8 +104,11 @@
    :margin "1.75rem auto"
    :left "50%"
    :transform "translate(-50%, 0)"
+   :min-width "300px"
    :padding "10px"
-   :box-shadow "8px 5px 5px black"})
+   :box-shadow "8px 5px 5px black"}
+  [:header
+   {:margin-top "15px"}])
 
 (defclass close-button
   []
@@ -111,5 +116,5 @@
    :width "24px"
    :height "24px"
    :cursor :pointer
-   :top "16px"
-   :right "16px"})
+   :top "8px"
+   :right "8px"})
