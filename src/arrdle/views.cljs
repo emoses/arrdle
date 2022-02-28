@@ -77,7 +77,7 @@
 
 (defn copy-button [social-text]
   [:span.copy
-   [:button {:on-click #(rf/dispatch [::events/share-social-clipboard social-text])}
+   [:button {:on-click #(rf/dispatch-sync [::events/share-social-clipboard social-text])}
     "🏴‍☠ Share 🏴‍☠" [:img.icon {:src "img/share-white.svg" :alt ""}]]])
 
 (defn modal [& content]

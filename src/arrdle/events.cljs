@@ -90,10 +90,12 @@
  ::share-social-clipboard
  (fn [db [_ text]]
    (if (.-clipboard js/navigator)
-     (-> (.writeText (.-clipboard js/navigator) text)
-         (.then #(rf/dispatch [::share-social-clipboard-done]))
-         (.catch #(rf/dispatch [::share-social-clipboard-error])))
+     (do (.log js/console ("clipboard"))
+         (-> (.writeText (.-clipboard js/navigator) text)
+             (.then #(rf/dispatch [::share-social-clipboard-done]))
+             (.catch #(rf/dispatch [::share-social-clipboard-error %]))))
      (do
+       (.log js/console ("no clipboard"))
        (copy-to-clipboard text)
        ((rf/dispatch [::share-social-clipboard-done]))))
    db))
